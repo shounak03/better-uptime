@@ -1,8 +1,15 @@
 import { Router } from "express";
 import { prismaClient } from "db/client";
 import { loginSchema, registerSchema } from "../types";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 const router = Router();
+
+
 
 router.post("/api/v1/login", async (req, res) => {
     const { email, password } = loginSchema.parse(req.body);
@@ -24,7 +31,8 @@ router.post("/api/v1/login", async (req, res) => {
     if(!isPasswordValid) {
         return res.status(400).json({ message: "Invalid password" });
     }
-    return res.status(200).json(user.id);
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: "24h" });
+    return res.status(200).json({ token });
 });
 
 router.post("/api/v1/register", async (req, res) => {
@@ -41,3 +49,5 @@ router.post("/api/v1/register", async (req, res) => {
     })
     return res.status(200).json(user.id);
 })
+
+export default router;
