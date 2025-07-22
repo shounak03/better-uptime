@@ -3,15 +3,22 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "cd ../../packages/db && bunx prisma generate && cd ../../apps/backend && bun --watch index.ts",
+    "start": "bun index.ts"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "db": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.3",
+    "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
-    "db": "workspace:*"
+    "zod": "^4.0.5"
   }
 }

@@ -13,27 +13,41 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  timeAdded DateTime  @default(now())
+  website   website[]
+}
+
 model website {
-  id        String   @id @default(uuid())
-  name      String
-  url       String
-  timeAdded DateTime @default(now())
+  id          String        @id @default(uuid())
+  name        String
+  url         String
+  timeAdded   DateTime      @default(now())
   WebsiteTick WebsiteTick[]
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 model Region {
-  id        String   @id @default(uuid())
-  name      String
-  timeAdded DateTime @default(now())
+  id          String        @id @default(uuid())
+  name        String
+  timeAdded   DateTime      @default(now())
   WebsiteTick WebsiteTick[]
 }
+
 model WebsiteTick {
-  id        String   @id @default(uuid())
+  id        String        @id @default(uuid())
   websiteId String
-  website   website  @relation(fields: [websiteId], references: [id])
+  website   website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   regionId  String
-  region    Region   @relation(fields: [regionId], references: [id])
+  region    Region        @relation(fields: [regionId], references: [id])
   status    WebsiteStatus
-  timeAdded DateTime @default(now())
+  timeAdded DateTime      @default(now())
 }
 
 enum WebsiteStatus {
