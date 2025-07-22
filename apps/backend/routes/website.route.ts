@@ -10,19 +10,31 @@ router.post("/api/v1/addWebsite", async (req, res) => {
     data: {
       name: req.body.name,
       url: req.body.url,
-      userId: req.body.userId,
+      userId: req.userId,
+      timeAdded: new Date()
     },
   });
   res.status(200).json({ message: "OK", websiteId });
 });
 
-router.get("/api/v1/website/:id", async(req,res)=>{
-    const { id } = req.params;
+router.get("/api/v1/status/:website_id", async(req,res)=>{
+    const { website_id } = req.params;
     const website = await prismaClient.website.findUnique({
         where: {
-            id
+            id: website_id,
+            userId: req.userId
+        },include:{
+          WebsiteTick:{
+            orderBy:{
+              timeAdded: "desc"
+            },take: 1
+          }
         }
     })
+    if(!website) {
+        return res.status(404).json({ message: "Website not found" });
+    }
+   
     res.status(200).json(website)
 })
 
