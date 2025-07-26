@@ -3,14 +3,16 @@ import { prismaClient } from "db/client";
 import { verifyToken } from "../middleware";
 const router = Router();
 
-router.use(verifyToken);
+// router.use(verifyToken);
 
 router.post("/api/v1/addWebsite", async (req, res) => {
+  // console.log(user);
+  
   const websiteId = await prismaClient.website.create({
     data: {
       name: req.body.name,
       url: req.body.url,
-      userId: req.userId,
+      userId: "eaacbf25-913a-4f7a-affe-ca7468bc34de",
       timeAdded: new Date()
     },
   });

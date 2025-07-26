@@ -11,11 +11,12 @@ async function main() {
   }
   )
 
-  await addWebsites(websites.map(w => ({
+  const res = await addWebsites(websites.map(w => ({
     url: w.url,
     id: w.id
   })))
 
+  
 }
 
 setTimeout(() => { 

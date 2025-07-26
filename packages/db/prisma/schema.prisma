@@ -20,10 +20,10 @@ model User {
   email     String     @unique
   password  String
   timeAdded DateTime  @default(now())
-  website   website[]
+  Website   Website[]
 }
 
-model website {
+model Website {
   id          String        @id @default(uuid())
   name        String
   url         String
@@ -36,18 +36,18 @@ model website {
 model Region {
   id          String        @id @default(uuid())
   name        String
-  timeAdded   DateTime      @default(now())
   WebsiteTick WebsiteTick[]
 }
 
 model WebsiteTick {
-  id        String        @id @default(uuid())
-  websiteId String
-  website   website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-  regionId  String
-  region    Region        @relation(fields: [regionId], references: [id])
-  status    WebsiteStatus
-  timeAdded DateTime      @default(now())
+  id           String        @id @default(uuid())
+  websiteId    String
+  website      Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  regionId     String
+  region       Region        @relation(fields: [regionId], references: [id])
+  status       WebsiteStatus
+  responseTime Int?          // Response time in milliseconds
+  timeAdded    DateTime      @default(now())
 }
 
 enum WebsiteStatus {

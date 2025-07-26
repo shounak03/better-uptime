@@ -60,7 +60,7 @@ router.post("/api/v1/register", async (req, res) => {
                 password: await bcrypt.hash(password, 10),
             }
         })
-        return res.status(200).json(user.id);
+        return res.status(200).json({id:user.id});
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong" });
     }
