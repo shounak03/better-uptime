@@ -1,13 +1,37 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --primary: 59, 130, 246;
+  --primary-foreground: 255, 255, 255;
+  --secondary: 156, 163, 175;
+  --muted: 249, 250, 251;
+  --border: 229, 231, 235;
+  --success: 34, 197, 94;
+  --error: 239, 68, 68;
+  --warning: 245, 158, 11;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+    --primary: 59, 130, 246;
+    --primary-foreground: 255, 255, 255;
+    --secondary: 107, 114, 128;
+    --muted: 17, 24, 39;
+    --border: 55, 65, 81;
+    --success: 34, 197, 94;
+    --error: 239, 68, 68;
+    --warning: 245, 158, 11;
   }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html,
@@ -17,14 +41,15 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  line-height: 1.6;
 }
 
 a {
@@ -32,19 +57,133 @@ a {
   text-decoration: none;
 }
 
-.imgDark {
-  display: none;
+button {
+  font-family: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: rgb(var(--primary));
+  color: rgb(var(--primary-foreground));
+}
+
+.btn-primary:hover {
+  background-color: rgb(var(--primary) / 0.9);
+}
+
+.btn-secondary {
+  background-color: rgb(var(--secondary));
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: rgb(var(--secondary) / 0.9);
+}
+
+.btn-outline {
+  border: 1px solid rgb(var(--border));
+  background-color: transparent;
+}
+
+.btn-outline:hover {
+  background-color: rgb(var(--muted));
+}
+
+.card {
+  background: white;
+  border: 1px solid rgb(var(--border));
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  .card {
+    background: rgb(31, 41, 55);
+    border-color: rgb(var(--border));
   }
+}
 
-  .imgLight {
-    display: none;
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: rgb(var(--foreground-rgb));
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 0.5rem;
+  background-color: white;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 3px rgb(var(--primary) / 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input {
+    background-color: rgb(31, 41, 55);
+    border-color: rgb(var(--border));
+    color: white;
   }
-  .imgDark {
-    display: unset;
-  }
+}
+
+.form-error {
+  color: rgb(var(--error));
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-up {
+  background-color: rgb(var(--success) / 0.1);
+  color: rgb(var(--success));
+}
+
+.status-down {
+  background-color: rgb(var(--error) / 0.1);
+  color: rgb(var(--error));
+}
+
+.status-unknown {
+  background-color: rgb(var(--warning) / 0.1);
+  color: rgb(var(--warning));
 }
