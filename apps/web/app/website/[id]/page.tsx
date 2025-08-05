@@ -55,17 +55,12 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
 
   if (isLoading) {
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
-        <header style={{ 
-          backgroundColor: "white", 
-          borderBottom: "1px solid rgb(var(--border))",
-          padding: "1rem 0"
-        }}>
+      <div className="min-h-screen bg-muted dark:bg-muted-dark">
+        <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
           <div className="container">
             <Link 
               href="/dashboard" 
-              className="btn btn-outline"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "fit-content" }}
+              className="btn btn-outline flex items-center gap-2 w-fit"
             >
               <ArrowLeft size={16} />
               Back to Dashboard
@@ -73,8 +68,8 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
           </div>
         </header>
         
-        <main className="container" style={{ paddingTop: "2rem" }}>
-          <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
+        <main className="container pt-8">
+          <div className="card text-center py-12">
             <div>Loading website status...</div>
           </div>
         </main>
@@ -84,17 +79,12 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
 
   if (error || !website) {
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
-        <header style={{ 
-          backgroundColor: "white", 
-          borderBottom: "1px solid rgb(var(--border))",
-          padding: "1rem 0"
-        }}>
+      <div className="min-h-screen bg-muted dark:bg-muted-dark">
+        <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
           <div className="container">
             <Link 
               href="/dashboard" 
-              className="btn btn-outline"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "fit-content" }}
+              className="btn btn-outline flex items-center gap-2 w-fit"
             >
               <ArrowLeft size={16} />
               Back to Dashboard
@@ -102,16 +92,13 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
           </div>
         </header>
         
-        <main className="container" style={{ paddingTop: "2rem" }}>
-          <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
-            <AlertCircle size={48} style={{ 
-              margin: "0 auto 1rem", 
-              color: "rgb(var(--error))" 
-            }} />
-            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+        <main className="container pt-8">
+          <div className="card text-center py-12">
+            <AlertCircle size={48} className="mx-auto mb-4 text-error" />
+            <h2 className="text-2xl font-bold mb-2">
               Website Not Found
             </h2>
-            <p style={{ color: "rgb(var(--secondary))", marginBottom: "2rem" }}>
+            <p className="text-secondary dark:text-secondary-dark mb-8">
               {error || "The website you're looking for doesn't exist or you don't have access to it."}
             </p>
             <Link href="/dashboard" className="btn btn-primary">
@@ -140,18 +127,13 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
     : 0;
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
+    <div className="min-h-screen bg-muted dark:bg-muted-dark">
       {/* Header */}
-      <header style={{ 
-        backgroundColor: "white", 
-        borderBottom: "1px solid rgb(var(--border))",
-        padding: "1rem 0"
-      }}>
+      <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
         <div className="container">
           <Link 
             href="/dashboard" 
-            className="btn btn-outline"
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "fit-content" }}
+            className="btn btn-outline flex items-center gap-2 w-fit"
           >
             <ArrowLeft size={16} />
             Back to Dashboard
@@ -160,97 +142,70 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
       </header>
 
       {/* Main Content */}
-      <main className="container" style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
+      <main className="container pt-8 pb-8">
         {/* Website Header */}
-        <div className="card" style={{ marginBottom: "2rem" }}>
-          <div style={{ 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "flex-start",
-            marginBottom: "1rem"
-          }}>
+        <div className="card mb-8">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <h1 style={{ 
-                fontSize: "2rem", 
-                fontWeight: "bold", 
-                marginBottom: "0.5rem" 
-              }}>
+              <h1 className="text-3xl font-bold mb-2">
                 {website.name}
               </h1>
-              <p style={{ 
-                color: "rgb(var(--secondary))",
-                fontSize: "1rem",
-                marginBottom: "0.5rem"
-              }}>
+              <p className="text-secondary dark:text-secondary-dark text-base mb-2">
                 {website.url}
               </p>
-              <p style={{ 
-                color: "rgb(var(--secondary))",
-                fontSize: "0.875rem"
-              }}>
+              <p className="text-secondary dark:text-secondary-dark text-sm">
                 Monitoring since {new Date(website.timeAdded).toLocaleDateString()}
               </p>
             </div>
             
-            <div className={`status-indicator status-${currentStatus.toLowerCase()}`} style={{
-              fontSize: "1rem",
-              padding: "0.5rem 1rem"
-            }}>
-              <div style={{ 
-                width: "10px", 
-                height: "10px", 
-                borderRadius: "50%",
-                backgroundColor: currentStatus === "UP" ? "rgb(var(--success))" : 
-                              currentStatus === "DOWN" ? "rgb(var(--error))" : 
-                              "rgb(var(--warning))"
-              }} />
+            <div className={`status-indicator status-${currentStatus.toLowerCase()} text-base px-4 py-2`}>
+              <div className={`w-2.5 h-2.5 rounded-full ${
+                currentStatus === "UP" ? "bg-success" : 
+                currentStatus === "DOWN" ? "bg-error" : 
+                "bg-warning"
+              }`} />
               {currentStatus}
             </div>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div style={{ 
-          display: "grid", 
-          gap: "1rem",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          marginBottom: "2rem"
-        }}>
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mb-8">
           <div className="card">
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-              <TrendingUp size={20} color="rgb(var(--success))" />
-              <h3 style={{ fontSize: "1rem", fontWeight: "600" }}>Uptime</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <TrendingUp size={20} className="text-success" />
+              <h3 className="text-base font-semibold">Uptime</h3>
             </div>
-            <div style={{ fontSize: "2rem", fontWeight: "bold", color: "rgb(var(--success))" }}>
+            <div className="text-3xl font-bold text-success">
               {uptimePercentage}%
             </div>
-            <p style={{ color: "rgb(var(--secondary))", fontSize: "0.875rem" }}>
+            <p className="text-secondary dark:text-secondary-dark text-sm">
               Last 30 days
             </p>
           </div>
 
           <div className="card">
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-              <Clock size={20} color="rgb(var(--primary))" />
-              <h3 style={{ fontSize: "1rem", fontWeight: "600" }}>Avg Response Time</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <Clock size={20} className="text-primary" />
+              <h3 className="text-base font-semibold">Avg Response Time</h3>
             </div>
-            <div style={{ fontSize: "2rem", fontWeight: "bold", color: "rgb(var(--primary))" }}>
+            <div className="text-3xl font-bold text-primary">
               {avgResponseTime}ms
             </div>
-            <p style={{ color: "rgb(var(--secondary))", fontSize: "0.875rem" }}>
+            <p className="text-secondary dark:text-secondary-dark text-sm">
               Last 24 hours
             </p>
           </div>
 
           <div className="card">
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-              <Activity size={20} color="rgb(var(--warning))" />
-              <h3 style={{ fontSize: "1rem", fontWeight: "600" }}>Last Check</h3>
+            <div className="flex items-center gap-3 mb-2">
+              <Activity size={20} className="text-warning" />
+              <h3 className="text-base font-semibold">Last Check</h3>
             </div>
-            <div style={{ fontSize: "1.25rem", fontWeight: "600" }}>
+            <div className="text-xl font-semibold">
               {lastTick ? new Date(lastTick.timeAdded).toLocaleTimeString() : "Never"}
             </div>
-            <p style={{ color: "rgb(var(--secondary))", fontSize: "0.875rem" }}>
+            <p className="text-secondary dark:text-secondary-dark text-sm">
               {lastTick ? `${lastTick.responseTime}ms response` : "No data available"}
             </p>
           </div>
@@ -258,55 +213,32 @@ export default function WebsiteStatusPage({ params }: { params: { id: string } }
 
         {/* Recent Checks */}
         <div className="card">
-          <h3 style={{ 
-            fontSize: "1.25rem", 
-            fontWeight: "600", 
-            marginBottom: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem"
-          }}>
+          <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
             <Activity size={20} />
             Recent Checks
           </h3>
           
           {website.WebsiteTick.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "2rem", color: "rgb(var(--secondary))" }}>
+            <div className="text-center py-8 text-secondary dark:text-secondary-dark">
               No monitoring data available yet. Checks will appear here shortly.
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <div className="flex flex-col gap-3">
               {website.WebsiteTick.slice(0, 10).map((tick) => (
                 <div 
                   key={tick.id}
-                  style={{ 
-                    display: "flex", 
-                    justifyContent: "space-between", 
-                    alignItems: "center",
-                    padding: "0.75rem",
-                    backgroundColor: "rgb(var(--muted))",
-                    borderRadius: "0.5rem"
-                  }}
+                  className="flex justify-between items-center p-3 bg-muted dark:bg-muted-dark rounded-lg"
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <div style={{ 
-                      width: "8px", 
-                      height: "8px", 
-                      borderRadius: "50%",
-                      backgroundColor: tick.status === "UP" ? "rgb(var(--success))" : 
-                                    tick.status === "DOWN" ? "rgb(var(--error))" : 
-                                    "rgb(var(--warning))"
-                    }} />
-                    <span style={{ fontWeight: "500" }}>{tick.status}</span>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${
+                      tick.status === "UP" ? "bg-success" : 
+                      tick.status === "DOWN" ? "bg-error" : 
+                      "bg-warning"
+                    }`} />
+                    <span className="font-medium">{tick.status}</span>
                   </div>
                   
-                  <div style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    gap: "1rem",
-                    fontSize: "0.875rem",
-                    color: "rgb(var(--secondary))"
-                  }}>
+                  <div className="flex items-center gap-4 text-sm text-secondary dark:text-secondary-dark">
                     <span>
                       {tick.responseTime ? `${tick.responseTime}ms` : "No response"}
                     </span>

@@ -1,189 +1,103 @@
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --primary: 59, 130, 246;
-  --primary-foreground: 255, 255, 255;
-  --secondary: 156, 163, 175;
-  --muted: 249, 250, 251;
-  --border: 229, 231, 235;
-  --success: 34, 197, 94;
-  --error: 239, 68, 68;
-  --warning: 245, 158, 11;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-    --primary: 59, 130, 246;
-    --primary-foreground: 255, 255, 255;
-    --secondary: 107, 114, 128;
-    --muted: 17, 24, 39;
-    --border: 55, 65, 81;
-    --success: 34, 197, 94;
-    --error: 239, 68, 68;
-    --warning: 245, 158, 11;
+    --font-geist-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-geist-mono: 'Geist Mono', monospace;
+  }
+
+  * {
+    @apply box-border;
+  }
+
+  html,
+  body {
+    @apply max-w-full overflow-x-hidden;
+  }
+
+  body {
+    background: linear-gradient(to bottom, #f9fafb, #ffffff);
+    @apply text-gray-900 dark:text-white;
+    @apply font-sans leading-relaxed;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(to bottom, #000000, #000000);
+    }
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    @apply font-inherit;
   }
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+@layer components {
+  .container {
+    @apply max-w-6xl mx-auto px-4;
+  }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all cursor-pointer border-0 no-underline;
+  }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  line-height: 1.6;
-}
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-secondary/90;
+  }
 
-button {
-  font-family: inherit;
-}
+  .btn-outline {
+    @apply border border-border bg-transparent hover:bg-muted dark:hover:bg-muted-dark;
+  }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-}
-
-.btn-primary {
-  background-color: rgb(var(--primary));
-  color: rgb(var(--primary-foreground));
-}
-
-.btn-primary:hover {
-  background-color: rgb(var(--primary) / 0.9);
-}
-
-.btn-secondary {
-  background-color: rgb(var(--secondary));
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: rgb(var(--secondary) / 0.9);
-}
-
-.btn-outline {
-  border: 1px solid rgb(var(--border));
-  background-color: transparent;
-}
-
-.btn-outline:hover {
-  background-color: rgb(var(--muted));
-}
-
-.card {
-  background: white;
-  border: 1px solid rgb(var(--border));
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
+  /* Card component */
   .card {
-    background: rgb(31, 41, 55);
-    border-color: rgb(var(--border));
+    @apply bg-white dark:bg-gray-800 border border-border dark:border-border-dark rounded-xl p-6 shadow-sm;
   }
-}
 
-.form-group {
-  margin-bottom: 1rem;
-}
+  /* Form components */
+  .form-group {
+    @apply mb-4;
+  }
 
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: rgb(var(--foreground-rgb));
-}
+  .form-label {
+    @apply block mb-2 font-medium text-gray-900 dark:text-white;
+  }
 
-.form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid rgb(var(--border));
-  border-radius: 0.5rem;
-  background-color: white;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: rgb(var(--primary));
-  box-shadow: 0 0 0 3px rgb(var(--primary) / 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
   .form-input {
-    background-color: rgb(31, 41, 55);
-    border-color: rgb(var(--border));
-    color: white;
+    @apply w-full px-3 py-3 border border-border dark:border-border-dark rounded-lg bg-white dark:bg-gray-800 text-base transition-colors;
+    @apply focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10;
+    @apply dark:text-white;
   }
-}
 
-.form-error {
-  color: rgb(var(--error));
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
+  .form-error {
+    @apply text-error text-sm mt-1;
+  }
 
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
+  /* Status indicators */
+  .status-indicator {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium;
+  }
 
-.status-up {
-  background-color: rgb(var(--success) / 0.1);
-  color: rgb(var(--success));
-}
+  .status-up {
+    @apply bg-success/10 text-success;
+  }
 
-.status-down {
-  background-color: rgb(var(--error) / 0.1);
-  color: rgb(var(--error));
-}
+  .status-down {
+    @apply bg-error/10 text-error;
+  }
 
-.status-unknown {
-  background-color: rgb(var(--warning) / 0.1);
-  color: rgb(var(--warning));
+  .status-unknown {
+    @apply bg-warning/10 text-warning;
+  }
 }

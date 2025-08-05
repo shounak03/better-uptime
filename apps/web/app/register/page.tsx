@@ -53,19 +53,13 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div style={{ 
-        minHeight: "100vh", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center",
-        padding: "1rem"
-      }}>
-        <div className="card" style={{ width: "100%", maxWidth: "400px", textAlign: "center" }}>
-          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✅</div>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="card w-full max-w-md text-center">
+          <div className="text-5xl mb-4">✅</div>
+          <h2 className="text-2xl font-bold mb-2">
             Account Created Successfully!
           </h2>
-          <p style={{ color: "rgb(var(--secondary))", marginBottom: "1rem" }}>
+          <p className="text-secondary dark:text-secondary-dark mb-4">
             Redirecting you to login...
           </p>
         </div>
@@ -74,19 +68,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <div style={{ 
-      minHeight: "100vh", 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center",
-      padding: "1rem"
-    }}>
-      <div className="card" style={{ width: "100%", maxWidth: "400px" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="card w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2">
             Sign Up
           </h1>
-          <p style={{ color: "rgb(var(--secondary))" }}>
+          <p className="text-secondary dark:text-secondary-dark">
             Create your Better Uptime account
           </p>
         </div>
@@ -157,25 +145,24 @@ export default function RegisterPage() {
           </div>
 
           {apiError && (
-            <div className="form-error" style={{ marginBottom: "1rem" }}>
+            <div className="form-error mb-4">
               {apiError}
             </div>
           )}
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary w-full mb-4"
             disabled={isLoading}
-            style={{ width: "100%", marginBottom: "1rem" }}
           >
             {isLoading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 
-        <div style={{ textAlign: "center" }}>
-          <p style={{ color: "rgb(var(--secondary))" }}>
+        <div className="text-center">
+          <p className="text-secondary dark:text-secondary-dark">
             Already have an account?{" "}
-            <Link href="/login" style={{ color: "rgb(var(--primary))", fontWeight: "500" }}>
+            <Link href="/login" className="text-primary font-medium hover:underline">
               Sign in
             </Link>
           </p>

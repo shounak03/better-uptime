@@ -58,17 +58,12 @@ export default function AddWebsitePage() {
 
   if (success) {
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
-        <header style={{ 
-          backgroundColor: "white", 
-          borderBottom: "1px solid rgb(var(--border))",
-          padding: "1rem 0"
-        }}>
+      <div className="min-h-screen bg-muted dark:bg-muted-dark">
+        <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
           <div className="container">
             <Link 
               href="/dashboard" 
-              className="btn btn-outline"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "fit-content" }}
+              className="btn btn-outline flex items-center gap-2 w-fit"
             >
               <ArrowLeft size={16} />
               Back to Dashboard
@@ -76,19 +71,14 @@ export default function AddWebsitePage() {
           </div>
         </header>
 
-        <main className="container" style={{ paddingTop: "2rem" }}>
-          <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            justifyContent: "center",
-            minHeight: "60vh"
-          }}>
-            <div className="card" style={{ width: "100%", maxWidth: "400px", textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✅</div>
-              <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+        <main className="container pt-8">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="card w-full max-w-md text-center">
+              <div className="text-5xl mb-4">✅</div>
+              <h2 className="text-2xl font-bold mb-2">
                 Website Added Successfully!
               </h2>
-              <p style={{ color: "rgb(var(--secondary))", marginBottom: "1rem" }}>
+              <p className="text-secondary dark:text-secondary-dark mb-4">
                 We'll start monitoring your website shortly. Redirecting to dashboard...
               </p>
             </div>
@@ -99,18 +89,13 @@ export default function AddWebsitePage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
+    <div className="min-h-screen bg-muted dark:bg-muted-dark">
       {/* Header */}
-      <header style={{ 
-        backgroundColor: "white", 
-        borderBottom: "1px solid rgb(var(--border))",
-        padding: "1rem 0"
-      }}>
+      <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
         <div className="container">
           <Link 
             href="/dashboard" 
-            className="btn btn-outline"
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem", width: "fit-content" }}
+            className="btn btn-outline flex items-center gap-2 w-fit"
           >
             <ArrowLeft size={16} />
             Back to Dashboard
@@ -119,33 +104,19 @@ export default function AddWebsitePage() {
       </header>
 
       {/* Main Content */}
-      <main className="container" style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
-        <div style={{ 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center",
-          minHeight: "60vh"
-        }}>
-          <div className="card" style={{ width: "100%", maxWidth: "500px" }}>
-            <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-              <div style={{ 
-                display: "flex", 
-                alignItems: "center", 
-                justifyContent: "center", 
-                marginBottom: "1rem" 
-              }}>
-                <div style={{ 
-                  backgroundColor: "rgb(var(--primary) / 0.1)", 
-                  padding: "1rem", 
-                  borderRadius: "50%" 
-                }}>
-                  <Plus size={24} color="rgb(var(--primary))" />
+      <main className="container pt-8 pb-8">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="card w-full max-w-lg">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-primary/10 p-4 rounded-full">
+                  <Plus size={24} className="text-primary" />
                 </div>
               </div>
-              <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+              <h1 className="text-3xl font-bold mb-2">
                 Add New Website
               </h1>
-              <p style={{ color: "rgb(var(--secondary))" }}>
+              <p className="text-secondary dark:text-secondary-dark">
                 Start monitoring a new website for uptime and performance
               </p>
             </div>
@@ -181,51 +152,32 @@ export default function AddWebsitePage() {
                 {errors.url && (
                   <p className="form-error">{errors.url.message}</p>
                 )}
-                <div style={{ 
-                  fontSize: "0.875rem", 
-                  color: "rgb(var(--secondary))", 
-                  marginTop: "0.25rem" 
-                }}>
+                <div className="text-sm text-secondary dark:text-secondary-dark mt-1">
                   Make sure to include the protocol (http:// or https://)
                 </div>
               </div>
 
               {apiError && (
-                <div className="form-error" style={{ marginBottom: "1rem" }}>
+                <div className="form-error mb-4">
                   {apiError}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary w-full mb-4"
                 disabled={isLoading}
-                style={{ width: "100%", marginBottom: "1rem" }}
               >
                 {isLoading ? "Adding Website..." : "Add Website"}
               </button>
             </form>
 
-            <div style={{ 
-              backgroundColor: "rgb(var(--muted))", 
-              padding: "1rem", 
-              borderRadius: "0.5rem",
-              fontSize: "0.875rem"
-            }}>
-              <div style={{ 
-                display: "flex", 
-                alignItems: "center", 
-                gap: "0.5rem", 
-                marginBottom: "0.5rem" 
-              }}>
-                <Globe size={16} color="rgb(var(--primary))" />
+            <div className="bg-muted dark:bg-muted-dark p-4 rounded-lg text-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <Globe size={16} className="text-primary" />
                 <strong>What happens next?</strong>
               </div>
-              <ul style={{ 
-                paddingLeft: "1.5rem", 
-                color: "rgb(var(--secondary))",
-                lineHeight: "1.5"
-              }}>
+              <ul className="pl-6 text-secondary dark:text-secondary-dark leading-relaxed list-disc">
                 <li>We'll start checking your website every minute</li>
                 <li>You'll get notifications if we detect any downtime</li>
                 <li>View detailed uptime statistics and response times</li>

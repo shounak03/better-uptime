@@ -15,58 +15,37 @@ export default function Navigation() {
   };
 
   return (
-    <header style={{ 
-      backgroundColor: "white", 
-      borderBottom: "1px solid rgb(var(--border))",
-      padding: "1rem 0"
-    }}>
-      <div className="container" style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center" 
-      }}>
+    <header className="bg-white dark:bg-gray-800 border-b border-border dark:border-border-dark py-4">
+      <div className="container flex justify-between items-center">
         <Link 
           href="/dashboard"
-          style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "0.75rem",
-            textDecoration: "none",
-            color: "inherit"
-          }}
+          className="flex items-center gap-3 no-underline text-inherit"
         >
-          <Globe size={24} color="rgb(var(--primary))" />
-          <h1 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+          <Globe size={24} className="text-primary" />
+          <h1 className="text-xl font-bold">
             Better Uptime
           </h1>
         </Link>
         
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <div className="flex items-center gap-4">
           <Link 
             href="/add-website" 
-            className="btn btn-primary"
-            style={{ 
-              display: "flex", 
-              alignItems: "center", 
-              gap: "0.5rem",
-              fontSize: "0.875rem"
-            }}
+            className="btn btn-primary flex items-center gap-2 text-sm"
           >
             <Plus size={16} />
             Add Website
           </Link>
           
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div className="flex items-center gap-2">
             <User size={16} />
-            <span style={{ fontSize: "0.875rem", color: "rgb(var(--secondary))" }}>
+            <span className="text-sm text-secondary dark:text-secondary-dark">
               Welcome back!
             </span>
           </div>
           
           <button 
             onClick={handleLogout}
-            className="btn btn-outline"
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            className="btn btn-outline flex items-center gap-2"
           >
             <LogOut size={16} />
             Logout

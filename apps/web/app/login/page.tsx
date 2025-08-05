@@ -46,19 +46,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ 
-      minHeight: "100vh", 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center",
-      padding: "1rem"
-    }}>
-      <div className="card" style={{ width: "100%", maxWidth: "400px" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="card w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2">
             Sign In
           </h1>
-          <p style={{ color: "rgb(var(--secondary))" }}>
+          <p className="text-secondary dark:text-secondary-dark">
             Welcome back to Better Uptime
           </p>
         </div>
@@ -97,25 +91,24 @@ export default function LoginPage() {
           </div>
 
           {apiError && (
-            <div className="form-error" style={{ marginBottom: "1rem" }}>
+            <div className="form-error mb-4">
               {apiError}
             </div>
           )}
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary w-full mb-4"
             disabled={isLoading}
-            style={{ width: "100%", marginBottom: "1rem" }}
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <div style={{ textAlign: "center" }}>
-          <p style={{ color: "rgb(var(--secondary))" }}>
+        <div className="text-center">
+          <p className="text-secondary dark:text-secondary-dark">
             Don't have an account?{" "}
-            <Link href="/register" style={{ color: "rgb(var(--primary))", fontWeight: "500" }}>
+            <Link href="/register" className="text-primary font-medium hover:underline">
               Sign up
             </Link>
           </p>

@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../lib/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Plus, Globe, LogOut, User } from "lucide-react";
+import { Plus, Globe } from "lucide-react";
+import Navigation from "../../components/Navigation";
 
 interface Website {
   id: string;
@@ -19,7 +20,7 @@ interface Website {
 }
 
 export default function DashboardPage() {
-  const { user, logout, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const [websites, setWebsites] = useState<Website[]>([]);
   const [isLoadingWebsites, setIsLoadingWebsites] = useState(true);
@@ -68,19 +69,9 @@ export default function DashboardPage() {
     }, 1000);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
   if (isLoading) {
     return (
-      <div style={{ 
-        minHeight: "100vh", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center" 
-      }}>
+      <div className="min-h-screen flex items-center justify-center">
         <div>Loading...</div>
       </div>
     );
@@ -91,66 +82,22 @@ export default function DashboardPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "rgb(var(--muted))" }}>
-      {/* Header */}
-      <header style={{ 
-        backgroundColor: "white", 
-        borderBottom: "1px solid rgb(var(--border))",
-        padding: "1rem 0"
-      }}>
-        <div className="container" style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center" 
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <Globe size={24} color="rgb(var(--primary))" />
-            <h1 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-              Better Uptime
-            </h1>
-          </div>
-          
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <User size={16} />
-              <span style={{ fontSize: "0.875rem", color: "rgb(var(--secondary))" }}>
-                Welcome back!
-              </span>
-            </div>
-            <button 
-              onClick={handleLogout}
-              className="btn btn-outline"
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <LogOut size={16} />
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-muted dark:bg-muted-dark">
+      <Navigation />
 
       {/* Main Content */}
-      <main className="container" style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center",
-          marginBottom: "2rem"
-        }}>
+      <main className="container pt-8 pb-8">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+            <h2 className="text-3xl font-bold mb-2">
               Your Websites
             </h2>
-            <p style={{ color: "rgb(var(--secondary))" }}>
+            <p className="text-secondary dark:text-secondary-dark">
               Monitor your website uptime and performance
             </p>
           </div>
           
-          <Link href="/add-website" className="btn btn-primary" style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "0.5rem" 
-          }}>
+          <Link href="/add-website" className="btn btn-primary flex items-center gap-2">
             <Plus size={16} />
             Add Website
           </Link>
@@ -158,19 +105,16 @@ export default function DashboardPage() {
 
         {/* Website List */}
         {isLoadingWebsites ? (
-          <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
+          <div className="card text-center py-12">
             <div>Loading your websites...</div>
           </div>
         ) : websites.length === 0 ? (
-          <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
-            <Globe size={48} style={{ 
-              margin: "0 auto 1rem", 
-              color: "rgb(var(--secondary))" 
-            }} />
-            <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.5rem" }}>
+          <div className="card text-center py-12">
+            <Globe size={48} className="mx-auto mb-4 text-secondary dark:text-secondary-dark" />
+            <h3 className="text-xl font-semibold mb-2">
               No websites yet
             </h3>
-            <p style={{ color: "rgb(var(--secondary))", marginBottom: "2rem" }}>
+            <p className="text-secondary dark:text-secondary-dark mb-8">
               Start monitoring your first website by adding it below.
             </p>
             <Link href="/add-website" className="btn btn-primary">
@@ -178,11 +122,7 @@ export default function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div style={{ 
-            display: "grid", 
-            gap: "1rem",
-            gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))"
-          }}>
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {websites.map((website) => {
               const lastTick = website.WebsiteTick?.[0];
               const status = lastTick?.status || "UNKNOWN";
@@ -191,54 +131,31 @@ export default function DashboardPage() {
                 <Link 
                   key={website.id} 
                   href={`/website/${website.id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                  className="no-underline text-inherit"
                 >
-                  <div className="card" style={{ 
-                    transition: "all 0.2s",
-                    cursor: "pointer"
-                  }}>
-                    <div style={{ 
-                      display: "flex", 
-                      justifyContent: "space-between", 
-                      alignItems: "flex-start",
-                      marginBottom: "1rem"
-                    }}>
+                  <div className="card transition-all cursor-pointer hover:shadow-md">
+                    <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 style={{ 
-                          fontSize: "1.125rem", 
-                          fontWeight: "600",
-                          marginBottom: "0.25rem"
-                        }}>
+                        <h3 className="text-lg font-semibold mb-1">
                           {website.name}
                         </h3>
-                        <p style={{ 
-                          color: "rgb(var(--secondary))",
-                          fontSize: "0.875rem"
-                        }}>
+                        <p className="text-secondary dark:text-secondary-dark text-sm">
                           {website.url}
                         </p>
                       </div>
                       
                       <div className={`status-indicator status-${status.toLowerCase()}`}>
-                        <div style={{ 
-                          width: "8px", 
-                          height: "8px", 
-                          borderRadius: "50%",
-                          backgroundColor: status === "UP" ? "rgb(var(--success))" : 
-                                        status === "DOWN" ? "rgb(var(--error))" : 
-                                        "rgb(var(--warning))"
-                        }} />
+                        <div className={`w-2 h-2 rounded-full ${
+                          status === "UP" ? "bg-success" : 
+                          status === "DOWN" ? "bg-error" : 
+                          "bg-warning"
+                        }`} />
                         {status}
                       </div>
                     </div>
                     
                     {lastTick && (
-                      <div style={{ 
-                        display: "flex", 
-                        justifyContent: "space-between",
-                        fontSize: "0.875rem",
-                        color: "rgb(var(--secondary))"
-                      }}>
+                      <div className="flex justify-between text-sm text-secondary dark:text-secondary-dark">
                         <span>
                           Response time: {lastTick.responseTime ? `${lastTick.responseTime}ms` : "N/A"}
                         </span>
