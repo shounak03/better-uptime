@@ -35,7 +35,13 @@ router.post("/api/v1/login", async (req, res) => {
         return res.status(403).json({ message: "Invalid password" });
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: "24h" });
-    return res.status(200).json({ token });
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60, // 1 hour
+      });   
+    return res.status(200).json({ message: "Logged in successfully" });
 });
 
 router.post("/api/v1/register", async (req, res) => {

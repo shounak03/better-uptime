@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-geist-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-geist-mono: 'Geist Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: linear-gradient(to bottom, #f9fafb, #ffffff);
+    color: #111827;
+    font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(to bottom, #000000, #000000);
+      color: #ffffff;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .container {
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Button variants */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 0;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background-color: #3b82f6;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background-color: #2563eb;
+  }
+
+  .btn-secondary {
+    background-color: #9ca3af;
+    color: #ffffff;
+  }
+
+  .btn-secondary:hover {
+    background-color: #6b7280;
+  }
+
+  .btn-outline {
+    border: 1px solid #e5e7eb;
+    background-color: transparent;
+  }
+
+  .btn-outline:hover {
+    background-color: #f9fafb;
+  }
+
+  /* Card component */
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .card {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+    
+    .btn-outline:hover {
+      background-color: #111827;
+    }
+  }
+
+  /* Form components */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #111827;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .form-label {
+      color: #ffffff;
+    }
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .form-input {
+      background-color: #1f2937;
+      border-color: #374151;
+      color: #ffffff;
+    }
+  }
+
+  .form-error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  /* Status indicators */
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .status-up {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+  }
+
+  .status-down {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+
+  .status-unknown {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+  }
+}

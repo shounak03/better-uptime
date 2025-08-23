@@ -1,17 +1,22 @@
 import { Router } from "express";
 import { prismaClient } from "db/client";
 import { verifyToken } from "../middleware";
+import { addWebsiteSchema } from "../types";
 const router = Router();
 
 router.use(verifyToken);
 
 router.post("/api/v1/addWebsite", async (req, res) => {
-  // console.log(user);
-  
+  console.log(req.userId);
+  const data = addWebsiteSchema.safeParse(req.body);
+  if(!data.success) {
+    return res.status(400).json({ message: "Invalid data" });
+  }
+  const { name, url } = data.data;
   const websiteId = await prismaClient.website.create({
     data: {
-      name: req.body.name,
-      url: req.body.url,
+      name,
+      url,
       userId: req.userId!,
       timeAdded: new Date()
     },

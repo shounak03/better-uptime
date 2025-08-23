@@ -1,10 +1,15 @@
 import express, { urlencoded } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import websiteRouter from "./routes/website.route";
 import userRouter from "./routes/user.route";
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000", // Your frontend URL
+  credentials: true, // Allow cookies to be sent with requests
+}));
+app.use(cookieParser()); // Parse cookies from requests
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
