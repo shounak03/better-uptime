@@ -34,7 +34,12 @@ router.get("/api/v1/status/:website_id", async(req,res)=>{
           WebsiteTick:{
             orderBy:{
               timeAdded: "desc"
-            },take: 1
+            },take: 50, // Get last 50 ticks for detailed view
+            select: {
+              status: true,
+              responseTime: true,
+              timeAdded: true
+            }
           }
         }
     })
@@ -43,6 +48,36 @@ router.get("/api/v1/status/:website_id", async(req,res)=>{
     }
    
     res.status(200).json(website)
+})
+
+router.get("/api/v1/fetchWebsiteStatus", async(req,res)=>{
+  const websites = await prismaClient.website.findMany({
+    where: {
+      userId: req.userId
+    },
+    orderBy: {
+      timeAdded: "desc" // Most recently added first
+    },
+    select: {
+      id: true,
+      name: true,
+      url: true,
+      timeAdded: true,
+      WebsiteTick: {
+        orderBy: {
+          timeAdded: "desc"
+        },
+        take: 5, // Get last 5 ticks for each website
+        select: {
+          status: true,
+          responseTime: true,
+          timeAdded: true
+        }
+      }
+    }
+  });
+  console.log(websites)
+  res.status(200).json(websites)
 })
 
 export default router;

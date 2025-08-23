@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addWebsiteSchema } from "@/zodSchema";
 import { z } from "zod";
+import {toast} from "sonner";
+
 
 type AddWebsiteInput = z.infer<typeof addWebsiteSchema>;
 
@@ -13,20 +15,25 @@ export default function AddWebsites() {
     });
 
     const onSubmit = async (data: AddWebsiteInput) => {
-        const response = await fetch(`${backendUrl}/api/v1/addWebsite`, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include", 
-        });
-        const responseData = await response.json();
-        console.log(responseData);
-        
-        if (response.ok) {
-            // Reset form on success
-            window.location.reload();
+        try {
+            const response = await fetch(`${backendUrl}/api/v1/addWebsite`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include", 
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+            
+            if (response.ok) {
+                toast.success("Website added successfully");
+                window.location.reload();
+            }
+        } catch (error) {
+            toast.error("Failed to add website");
+            console.log(error);
         }
     }
 
@@ -66,7 +73,7 @@ export default function AddWebsites() {
                                 type="text"
                                 placeholder="e.g., My Portfolio"
                                 {...register("name")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 outline-none"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 outline-none"
                             />
                             {errors.name && (
                                 <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -81,13 +88,13 @@ export default function AddWebsites() {
                                 type="url"
                                 placeholder="https://example.com"
                                 {...register("url")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 outline-none"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 outline-none"
                             />
                             {errors.url && (
                                 <p className="mt-1 text-sm text-red-600">{errors.url.message}</p>
                             )}
                             <p className="mt-1 text-xs text-gray-500">
-                                Make sure to include the protocol (http:// or https://)
+                                Make sure to include the protocol (https://)
                             </p>
                         </div>
                         

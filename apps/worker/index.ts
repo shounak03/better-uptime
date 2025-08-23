@@ -1,5 +1,5 @@
 
-import { xReadGroup, xAck, addWebsiteStatuses, createConsumerGroups, type WebsiteStatusEvent } from "../../packages/redis-stream"
+import { xReadGroup, xAck, addWebsiteStatuses, createConsumerGroups, type WebsiteStatusEvent } from "redis-stream/client"
 
 //check if regionId ad workerId actually exists in the db
 const REGION_ID = process.env.REGION_ID!;

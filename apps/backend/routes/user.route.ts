@@ -39,7 +39,7 @@ router.post("/api/v1/login", async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 1000 * 60 * 60, // 1 hour
+        maxAge: 1000 * 60 * 60 * 24, 
       });   
     return res.status(200).json({ message: "Logged in successfully" });
 });

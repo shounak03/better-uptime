@@ -10,11 +10,14 @@ async function main() {
     }
   }
   )
+  console.log(websites)
 
   const res = await addWebsites(websites.map(w => ({
     url: w.url,
     id: w.id
   })))
+
+  console.log(res)
 
   
 }
