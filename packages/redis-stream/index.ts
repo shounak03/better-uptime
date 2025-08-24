@@ -1,5 +1,5 @@
-import { redis } from "bun";
-import { ClientClosedError, createClient } from "redis";
+
+import { createClient } from "redis";
 
 export const redisClient = createClient().on("error", (err) => console.log("Redis Client Error", err)).connect();
 
@@ -20,7 +20,7 @@ type MessageType = {
 type WebsiteStatusEvent = {
     websiteId: string;
     status: 'UP' | 'DOWN' | 'UNKNOWN';
-    regionId: string;
+    // regionId: string;
     responseTime: number;
     checkedAt: string; // ISO timestamp
 }
@@ -38,6 +38,7 @@ type StatusMessageType = {
 
 const STREAM_NAME = 'betteruptime:website'
 const STATUS_STREAM_NAME = 'betteruptime:website:status'
+export const CONSUMER_GROUP = 'website-checkers';
 
 async function xAdd({url,id}: WebsiteEvent) {
     (await redisClient).xAdd(
@@ -48,12 +49,12 @@ async function xAdd({url,id}: WebsiteEvent) {
 }
 
 // New function to add website status results to stream
-async function xAddStatus({websiteId, status, regionId, responseTime, checkedAt}: WebsiteStatusEvent) {
+async function xAddStatus({websiteId, status, responseTime, checkedAt}: WebsiteStatusEvent) {
     (await redisClient).xAdd(
         STATUS_STREAM_NAME, "*", {
             websiteId,
             status,
-            regionId,
+            // regionId,
             responseTime: responseTime.toString(),
             checkedAt
         }
@@ -118,7 +119,7 @@ export async function xAckStatus(consumerGroup: string, eventId: string) {
 // Function to create consumer groups if they don't exist
 export async function createConsumerGroups() {
     try {
-        await (await redisClient).xGroupCreate(STREAM_NAME, 'website-checkers', '0', { MKSTREAM: true });
+        await (await redisClient).xGroupCreate(STREAM_NAME, CONSUMER_GROUP, '0', { MKSTREAM: true });
         console.log('Created consumer group: website-checkers');
     } catch (error: any) {
         if (!error.message.includes('BUSYGROUP')) {
@@ -126,14 +127,14 @@ export async function createConsumerGroups() {
         }
     }
 
-    try {
-        await (await redisClient).xGroupCreate(STATUS_STREAM_NAME, 'status-processors', '0', { MKSTREAM: true });
-        console.log('Created consumer group: status-processors');
-    } catch (error: any) {
-        if (!error.message.includes('BUSYGROUP')) {
-            console.error('Error creating status-processors group:', error);
-        }
-    }
+    // try {
+    //     await (await redisClient).xGroupCreate(STATUS_STREAM_NAME, 'status-processors', '0', { MKSTREAM: true });
+    //     console.log('Created consumer group: status-processors');
+    // } catch (error: any) {
+    //     if (!error.message.includes('BUSYGROUP')) {
+    //         console.error('Error creating status-processors group:', error);
+    //     }
+    // }
 }
 
 // Export types for use in other packages

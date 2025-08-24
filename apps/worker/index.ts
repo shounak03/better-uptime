@@ -1,15 +1,15 @@
 
-import { xReadGroup, xAck, addWebsiteStatuses, createConsumerGroups, type WebsiteStatusEvent } from "redis-stream/client"
+import { xReadGroup, xAck,CONSUMER_GROUP, addWebsiteStatuses, createConsumerGroups, type WebsiteStatusEvent } from "redis-stream/client"
 
 //check if regionId ad workerId actually exists in the db
 const REGION_ID = process.env.REGION_ID!;
 const WORKER_ID = process.env.WORKER_ID!;
-const CONSUMER_GROUP = 'website-checkers';
+
 
 interface WebsiteStatus {
     websiteId: string
     status: string
-    regionId: string
+    // regionId: string
     responseTime: number
     checkedAt: string
 }
@@ -25,7 +25,7 @@ const fetchWebsite = async(url: string, website_id: string): Promise<WebsiteStat
     return {
         websiteId: website_id,
         status: res === true ? 'UP' : 'DOWN',
-        regionId: REGION_ID,
+        // regionId: REGION_ID,
         responseTime,
         checkedAt: new Date().toISOString()
     };
@@ -77,7 +77,7 @@ async function processWebsiteChecks() {
         const statusEvents: WebsiteStatusEvent[] = statuses.map((status: any) => ({
             websiteId: status.websiteId,
             status: status.status as 'UP' | 'DOWN',
-            regionId: status.regionId,
+            // regionId: status.regionId,
             responseTime: status.responseTime,
             checkedAt: status.checkedAt
         }));
@@ -104,7 +104,7 @@ async function processWebsiteChecks() {
 }
 
 async function startWorker() {
-    console.log(`🚀 Starting worker ${WORKER_ID} in region ${REGION_ID}`);
+    console.log(`🚀 Starting worker`);
     
     // Ensure consumer groups exist
     await createConsumerGroups();

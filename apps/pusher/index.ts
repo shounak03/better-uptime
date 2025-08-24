@@ -10,14 +10,14 @@ async function main() {
     }
   }
   )
-  console.log(websites)
+  console.log(websites.length)
 
   const res = await addWebsites(websites.map(w => ({
     url: w.url,
     id: w.id
   })))
 
-  console.log(res)
+
 
   
 }
