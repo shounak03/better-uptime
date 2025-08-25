@@ -1,0 +1,16 @@
+{
+  "name": "dbconsumer",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "db": "workspace:*",
+    "redis-stream": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
