@@ -32,9 +32,9 @@ const fetchWebsite = async(url: string, website_id: string): Promise<WebsiteStat
 }
 
 async function checkUrlStatusWithRetries(url: string, retries = 3, delay = 1000): Promise<boolean> {
-    const corrUrl = `https://${url}`;
+    // const corrUrl = `https://${url}`;
     try {
-        const response = await fetch(corrUrl, { method: 'GET', signal: AbortSignal.timeout(5000) });
+        const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(5000) });
         if (response.ok) {
             console.log(`✅ URL is up: ${url} (Status: ${response.status})`);
             return true;

@@ -2,6 +2,7 @@
 import { backendUrl } from "@/config";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import AddWebsite from "./AddWebsite";
 
 interface WebsiteTick {
     status: string;
@@ -70,7 +71,7 @@ function WebsiteCard({ website }: { website: Website }) {
     const last5Ticks = website.WebsiteTick.slice(0, 5);
 
     return (
-        <Link href={`/websiteStatus/${website.id}`}>
+        <Link href={`/dashboard/${website.id}`}>
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-200 cursor-pointer group">
                 <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
@@ -134,7 +135,8 @@ export default function WebsiteStatus() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const fetchWebsites = () => {
+        setLoading(true);
         fetch(`${backendUrl}/api/v1/fetchWebsiteStatus`, {
             credentials: "include",
         })
@@ -153,6 +155,10 @@ export default function WebsiteStatus() {
                 setError(err.message);
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        fetchWebsites();
     }, []);
 
     if (loading) {
@@ -213,14 +219,9 @@ export default function WebsiteStatus() {
                     </div>
                 </div>
 
-                {/* Add Website Button */}
+                {/* Add Website Component */}
                 <div className="mb-8">
-                    <Link href="/addWebsites" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                        Add New Website
-                    </Link>
+                    <AddWebsite onWebsiteAdded={fetchWebsites} />
                 </div>
 
                 {/* Websites Grid */}
@@ -229,12 +230,7 @@ export default function WebsiteStatus() {
                         <div className="text-gray-400 text-6xl mb-4">🌐</div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">No websites added yet</h3>
                         <p className="text-gray-600 mb-6">Start monitoring your websites by adding them to your dashboard</p>
-                        <Link href="/addWebsites" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add Your First Website
-                        </Link>
+                        <AddWebsite onWebsiteAdded={fetchWebsites} />
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
