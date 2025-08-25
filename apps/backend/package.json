@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "cd ../../packages/db && bunx prisma generate && cd ../../apps/backend && bun --watch index.ts",
+    "dev": "bun --watch index.ts",
     "start": "bun index.ts"
   },
   "devDependencies": {

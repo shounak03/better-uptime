@@ -4,6 +4,7 @@ import { backendUrl } from "@/config";
 import { loginSchema } from "@/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type LoginInput = z.infer<typeof loginSchema>;
@@ -15,20 +16,26 @@ export default function Login() {
 
   const onSubmit = async (data: LoginInput) => {
     console.log(data);
-    const response = await fetch(`${backendUrl}/api/v1/login`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include", 
-    });
-    const responseData = await response.json();
-    console.log(responseData);
-    
-    if (response.ok) {
-      // Redirect to dashboard or protected route after successful login
-      window.location.href = "/addWebsites";
+    try {
+      const response = await fetch(`${backendUrl}/api/v1/login`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", 
+      });
+      const responseData = await response.json();
+      console.log(responseData);
+      
+      if (response.ok) {
+        // Redirect to dashboard after successful login
+        window.location.href = "/dashboard";
+        toast.success("Logged in successfully");
+      }
+    } catch (error) {
+      toast.error("Login failed");
+      console.error("Login failed:", error);
     }
   };
 

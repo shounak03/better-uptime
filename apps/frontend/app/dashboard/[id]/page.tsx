@@ -198,13 +198,65 @@ export default function WebsiteStatusPage() {
         .filter(tick => tick.responseTime)
         .reduce((acc, tick, _, arr) => acc + (tick.responseTime! / arr.length), 0);
 
+    const handleLogout = async () => {
+        try {
+            console.log("Website detail logout - Starting logout process...");
+            const response = await fetch(`${backendUrl}/api/v1/logout`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+            console.log("Website detail logout response:", response.status, response.statusText);
+            
+            if (response.ok) {
+                console.log("Website detail logout successful, redirecting...");
+                // Redirect to landing page after logout
+                window.location.href = "/";
+            } else {
+                console.error("Website detail logout failed with status:", response.status);
+                const errorData = await response.json().catch(() => ({}));
+                console.error("Website detail logout error details:", errorData);
+            }
+        } catch (error) {
+            console.error("Website detail logout network error:", error);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+            {/* Navigation Header */}
+            <header className="bg-white shadow-sm border-b border-gray-200">
+                <div className="container mx-auto px-4 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h1 className="text-xl font-bold text-gray-900">LogWatch AI</h1>
+                        </div>
+                        <button
+                            onClick={handleLogout}
+                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors duration-200"
+                        >
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
+                            </svg>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </header>
+
             <div className="container mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="mb-8">
                     <Link 
-                        href="/websiteStatus" 
+                        href="/dashboard" 
                         className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-4 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

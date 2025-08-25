@@ -39,6 +39,7 @@ router.post("/api/v1/login", async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
+        path: "/",
         maxAge: 1000 * 60 * 60 * 24, 
       });   
     return res.status(200).json({ message: "Logged in successfully" });
@@ -70,6 +71,21 @@ router.post("/api/v1/register", async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong" });
     }
-})
+});
+
+router.post("/api/v1/logout", (req, res) => {
+    console.log("Logout endpoint called");
+    console.log("Current cookies:", req.cookies);
+    
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/", // Ensure the path matches the cookie set path
+    });
+    
+    console.log("Cookie cleared, sending success response");
+    return res.status(200).json({ message: "Logged out successfully" });
+});
 
 export default router;
