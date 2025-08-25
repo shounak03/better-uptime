@@ -38,7 +38,27 @@ router.get("/api/v1/status/:website_id", async(req,res)=>{
             select: {
               status: true,
               responseTime: true,
-              timeAdded: true
+              timeAdded: true,
+              httpStatusCode: true,
+              errorType: true,
+              errorMessage: true,
+              responseHeaders: true,
+              dnsResolutionTime: true,
+              sslValid: true,
+              sslExpiryDate: true,
+              sslIssuer: true,
+              aiAnalysis: {
+                select: {
+                  id: true,
+                  failureType: true,
+                  severity: true,
+                  summary: true,
+                  recommendations: true,
+                  confidence: true,
+                  analyzedAt: true,
+                  model: true
+                }
+              }
             }
           }
         }
@@ -71,7 +91,17 @@ router.get("/api/v1/fetchWebsiteStatus", async(req,res)=>{
         select: {
           status: true,
           responseTime: true,
-          timeAdded: true
+          timeAdded: true,
+          httpStatusCode: true,
+          errorType: true,
+          errorMessage: true,
+          aiAnalysis: {
+            select: {
+              failureType: true,
+              severity: true,
+              summary: true
+            }
+          }
         }
       }
     }

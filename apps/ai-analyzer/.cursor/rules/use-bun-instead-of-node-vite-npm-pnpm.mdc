@@ -1,0 +1,44 @@
+# Use Bun Instead of Node.js, npm, pnpm, or vite
+
+When writing or suggesting commands for this workspace, use Bun instead of Node.js, npm, pnpm, or vite.
+
+## Key Substitutions:
+- Use `bun` instead of `node`
+- Use `bun install` instead of `npm install` or `pnpm install`
+- Use `bun run` instead of `npm run` or `pnpm run`
+- Use `bun add` instead of `npm install <package>` or `pnpm add`
+- Use `bun remove` instead of `npm uninstall` or `pnpm remove`
+
+## Examples:
+✅ Correct:
+```bash
+bun install
+bun run dev
+bun add express
+bun remove lodash
+```
+
+❌ Incorrect:
+```bash
+npm install
+npm run dev
+node index.js
+pnpm add express
+```
+
+## TypeScript Support:
+Bun has native TypeScript support, so you can run `.ts` files directly:
+```bash
+bun run index.ts  # No need to compile first
+```
+
+## Package.json Scripts:
+When defining scripts in package.json, they should be runnable with `bun run`:
+```json
+{
+  "scripts": {
+    "dev": "bun run index.ts",
+    "start": "bun run index.ts"
+  }
+}
+```

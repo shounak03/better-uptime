@@ -1,13 +1,31 @@
 "use client"
 import { backendUrl } from "@/config";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { StatusBadge } from "@/components/statusBadge";
+import { AIAnalysisCard } from "@/components/AIanalysis";
+import { StatusChart } from "@/components/statusChart";
 
 interface WebsiteTick {
     status: string;
     responseTime: number | null;
     timeAdded: string;
+    httpStatusCode?: number;
+    errorType?: string;
+    errorMessage?: string;
+    aiAnalysis?: AIAnalysis;
+}
+
+interface AIAnalysis {
+    id: string;
+    failureType: string;
+    severity: string;
+    summary: string;
+    recommendations: string;
+    confidence: number;
+    analyzedAt: string;
+    model: string;
 }
 
 interface Website {
@@ -18,126 +36,10 @@ interface Website {
     WebsiteTick: WebsiteTick[];
 }
 
-function StatusBadge({ status }: { status: string }) {
-    const getStatusConfig = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'up': 
-                return {
-                    color: 'bg-green-100 text-green-800 border-green-200',
-                    icon: '✓',
-                    text: 'ONLINE'
-                };
-            case 'down': 
-                return {
-                    color: 'bg-red-100 text-red-800 border-red-200',
-                    icon: '✗',
-                    text: 'OFFLINE'
-                };
-            default: 
-                return {
-                    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-                    icon: '?',
-                    text: 'UNKNOWN'
-                };
-        }
-    };
 
-    const config = getStatusConfig(status);
-
-    return (
-        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border font-medium ${config.color}`}>
-            <span className="text-lg">{config.icon}</span>
-            <span>{config.text}</span>
-        </div>
-    );
-}
-
-function StatusChart({ ticks }: { ticks: WebsiteTick[] }) {
-    const maxTicks = 50;
-    const displayTicks = ticks.slice(0, maxTicks);
-
-    return (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Status History</h3>
-            
-            {displayTicks.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                    <div className="text-4xl mb-2">📊</div>
-                    <p>No status checks recorded yet</p>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {/* Visual timeline */}
-                    <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-sm font-medium text-gray-700 mb-2">
-                            Recent Activity (Latest {displayTicks.length} checks)
-                        </div>
-                        <div className="flex items-center gap-1 flex-wrap">
-                            {displayTicks.map((tick, index) => (
-                                <div
-                                    key={index}
-                                    className={`w-3 h-3 rounded-sm ${
-                                        tick.status.toLowerCase() === 'up' 
-                                            ? 'bg-green-500' 
-                                            : tick.status.toLowerCase() === 'down'
-                                            ? 'bg-red-500'
-                                            : 'bg-yellow-500'
-                                    }`}
-                                    title={`${tick.status.toUpperCase()} - ${new Date(tick.timeAdded).toLocaleString()}`}
-                                />
-                            ))}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-2">
-                            Hover over bars to see details • Green = Up • Red = Down • Yellow = Unknown
-                        </div>
-                    </div>
-
-                    {/* Recent checks table */}
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="border-b border-gray-200">
-                                    <th className="text-left py-2 font-medium text-gray-700">Status</th>
-                                    <th className="text-left py-2 font-medium text-gray-700">Response Time</th>
-                                    <th className="text-left py-2 font-medium text-gray-700">Checked At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {displayTicks.slice(0, 10).map((tick, index) => (
-                                    <tr key={index} className="border-b border-gray-100">
-                                        <td className="py-3">
-                                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                                                tick.status.toLowerCase() === 'up' 
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : tick.status.toLowerCase() === 'down'
-                                                    ? 'bg-red-100 text-red-800'
-                                                    : 'bg-yellow-100 text-yellow-800'
-                                            }`}>
-                                                {tick.status.toLowerCase() === 'up' ? '✓' : 
-                                                 tick.status.toLowerCase() === 'down' ? '✗' : '?'}
-                                                {tick.status.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 text-gray-600">
-                                            {tick.responseTime ? `${tick.responseTime}ms` : 'N/A'}
-                                        </td>
-                                        <td className="py-3 text-gray-600">
-                                            {new Date(tick.timeAdded).toLocaleString()}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-}
 
 export default function WebsiteStatusPage() {
     const { id } = useParams();
-    const router = useRouter();
     const [website, setWebsite] = useState<Website | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -161,6 +63,7 @@ export default function WebsiteStatusPage() {
                 setError(err.message);
                 setLoading(false);
             });
+            console.log(website);
     }, [id]);
 
     if (loading) {
@@ -198,37 +101,11 @@ export default function WebsiteStatusPage() {
         .filter(tick => tick.responseTime)
         .reduce((acc, tick, _, arr) => acc + (tick.responseTime! / arr.length), 0);
 
-    const handleLogout = async () => {
-        try {
-            console.log("Website detail logout - Starting logout process...");
-            const response = await fetch(`${backendUrl}/api/v1/logout`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            
-            console.log("Website detail logout response:", response.status, response.statusText);
-            
-            if (response.ok) {
-                console.log("Website detail logout successful, redirecting...");
-                // Redirect to landing page after logout
-                window.location.href = "/";
-            } else {
-                console.error("Website detail logout failed with status:", response.status);
-                const errorData = await response.json().catch(() => ({}));
-                console.error("Website detail logout error details:", errorData);
-            }
-        } catch (error) {
-            console.error("Website detail logout network error:", error);
-        }
-    };
-
+    
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
             {/* Navigation Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
+            {/* <header className="bg-white shadow-sm border-b border-gray-200">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
@@ -250,7 +127,7 @@ export default function WebsiteStatusPage() {
                         </button>
                     </div>
                 </div>
-            </header>
+            </header> */}
 
             <div className="container mx-auto px-4 py-8">
                 {/* Header */}
@@ -317,6 +194,13 @@ export default function WebsiteStatusPage() {
                         <div className="text-gray-600">
                             Last checked on {new Date(latestTick.timeAdded).toLocaleString()}
                         </div>
+                    </div>
+                )}
+
+                {/* AI Analysis Section */}
+                {website.WebsiteTick.length > 0 && website.WebsiteTick[0].aiAnalysis && (
+                    <div className="mb-8">
+                        <AIAnalysisCard analysis={website.WebsiteTick[0].aiAnalysis} />
                     </div>
                 )}
 

@@ -40,14 +40,45 @@ model Region {
 }
 
 model WebsiteTick {
-  id           String        @id @default(uuid())
-  websiteId    String
-  website      Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-  regionId     String
-  region       Region        @relation(fields: [regionId], references: [id])
-  status       WebsiteStatus
-  responseTime Int?          // Response time in milliseconds
-  timeAdded    DateTime      @default(now())
+  id              String        @id @default(uuid())
+  websiteId       String
+  website         Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  regionId        String
+  region          Region        @relation(fields: [regionId], references: [id])
+  status          WebsiteStatus
+  responseTime    Int?          // Response time in milliseconds
+  timeAdded       DateTime      @default(now())
+  
+  // Enhanced monitoring data
+  httpStatusCode  Int?
+  errorType       String?
+  errorMessage    String?
+  responseHeaders Json?         // Store as JSON object
+  dnsResolutionTime Int?        // DNS resolution time in milliseconds
+  sslValid        Boolean?
+  sslExpiryDate   DateTime?
+  sslIssuer       String?
+  
+  // AI Analysis results
+  aiAnalysis      AIAnalysis?
+}
+
+model AIAnalysis {
+  id              String      @id @default(uuid())
+  websiteTickId   String      @unique
+  websiteTick     WebsiteTick @relation(fields: [websiteTickId], references: [id], onDelete: Cascade)
+  
+  // AI-generated insights
+  failureType     String      // e.g., "FRONTEND", "BACKEND", "NETWORK", "SSL"
+  severity        String      // "LOW", "MEDIUM", "HIGH", "CRITICAL"
+  summary         String      // AI-generated human-readable summary
+  recommendations String      // AI-suggested fixes
+  confidence      Float       // AI confidence score (0.0 - 1.0)
+  
+  // Analysis metadata
+  analyzedAt      DateTime    @default(now())
+  model           String      // AI model used (e.g., "gpt-4", "claude-3")
+  tokens          Int?        // Tokens used for analysis
 }
 
 enum WebsiteStatus {

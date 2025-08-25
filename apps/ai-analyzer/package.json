@@ -1,0 +1,19 @@
+{
+  "name": "ai-analyzer",
+  "version": "1.0.0",
+  "description": "AI-powered website failure analysis service",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "bun run index.ts",
+    "start": "bun run index.ts"
+  },
+  "dependencies": {
+    "db": "workspace:*",
+    "redis-stream": "workspace:*",
+    "openai": "^4.28.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  }
+}

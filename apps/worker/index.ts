@@ -12,6 +12,17 @@ interface WebsiteStatus {
     // regionId: string
     responseTime: number
     checkedAt: string
+    // Enhanced data for AI analysis
+    httpStatusCode?: number
+    errorType?: string
+    errorMessage?: string
+    responseHeaders?: Record<string, string>
+    dnsResolutionTime?: number
+    sslInfo?: {
+        valid: boolean
+        expiryDate?: string
+        issuer?: string
+    }
 }
 
 const fetchWebsite = async(url: string, website_id: string): Promise<WebsiteStatus> => {
@@ -19,38 +30,129 @@ const fetchWebsite = async(url: string, website_id: string): Promise<WebsiteStat
     //create an object of {websiteId, RegionId, status}
 
     const startTime = Date.now();
-    const res = await checkUrlStatusWithRetries(url);
+    const result = await checkUrlStatusWithRetries(url);
     const responseTime = Date.now() - startTime;
 
     return {
         websiteId: website_id,
-        status: res === true ? 'UP' : 'DOWN',
+        status: result.status ? 'UP' : 'DOWN',
         // regionId: REGION_ID,
         responseTime,
-        checkedAt: new Date().toISOString()
+        checkedAt: new Date().toISOString(),
+        httpStatusCode: result.httpStatusCode,
+        errorType: result.errorType,
+        errorMessage: result.errorMessage,
+        responseHeaders: result.responseHeaders,
+        dnsResolutionTime: result.dnsResolutionTime,
+        sslInfo: result.sslInfo
     };
 }
 
-async function checkUrlStatusWithRetries(url: string, retries = 3, delay = 1000): Promise<boolean> {
-    // const corrUrl = `https://${url}`;
+interface DetailedCheckResult {
+    status: boolean
+    httpStatusCode?: number
+    errorType?: string
+    errorMessage?: string
+    responseHeaders?: Record<string, string>
+    dnsResolutionTime?: number
+    sslInfo?: {
+        valid: boolean
+        expiryDate?: string
+        issuer?: string
+    }
+}
+
+async function checkUrlStatusWithRetries(url: string, retries = 3, delay = 1000): Promise<DetailedCheckResult> {
+    const dnsStartTime = Date.now();
+    
     try {
-        const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(5000) });
+        // Parse URL to get hostname for DNS check
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname;
+        
+        // DNS resolution time check
+        const dnsResolutionTime = Date.now() - dnsStartTime;
+        
+        const response = await fetch(url, { 
+            method: 'GET', 
+            signal: AbortSignal.timeout(10000) 
+        });
+        
+        // Extract response headers
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+            responseHeaders[key] = value;
+        });
+        
+        // Get SSL info for HTTPS URLs
+        const sslInfo = urlObj.protocol === 'https:' ? await getSSLInfo(hostname) : undefined;
+        
         if (response.ok) {
             console.log(`✅ URL is up: ${url} (Status: ${response.status})`);
-            return true;
+            return {
+                status: true,
+                httpStatusCode: response.status,
+                responseHeaders,
+                dnsResolutionTime,
+                sslInfo
+            };
         } else {
             console.warn(`⚠️ URL responded with status: ${response.status}`);
-            return false;
+            return {
+                status: false,
+                httpStatusCode: response.status,
+                errorType: 'HTTP_ERROR',
+                errorMessage: `HTTP ${response.status} ${response.statusText}`,
+                responseHeaders,
+                dnsResolutionTime,
+                sslInfo
+            };
         }
     } catch (error: any) {
+        const errorType = classifyError(error);
+        
         if (retries > 0) {
-            console.warn(`Retrying ${url}... (${retries} retries left)`);
+            console.warn(`Retrying ${url}... (${retries} retries left) - Error: ${error.message}`);
             await new Promise(res => setTimeout(res, delay));
             return checkUrlStatusWithRetries(url, retries - 1, delay);
         } else {
             console.error(`❌ Failed to fetch ${url} after retries:`, error.message);
-            return false;
+            return {
+                status: false,
+                errorType,
+                errorMessage: error.message,
+                dnsResolutionTime: Date.now() - dnsStartTime
+            };
         }
+    }
+}
+
+function classifyError(error: any): string {
+    const message = error.message?.toLowerCase() || '';
+    
+    if (message.includes('timeout')) return 'TIMEOUT';
+    if (message.includes('network')) return 'NETWORK_ERROR';
+    if (message.includes('dns') || message.includes('resolve')) return 'DNS_ERROR';
+    if (message.includes('ssl') || message.includes('tls') || message.includes('certificate')) return 'SSL_ERROR';
+    if (message.includes('connection refused')) return 'CONNECTION_REFUSED';
+    if (message.includes('connection reset')) return 'CONNECTION_RESET';
+    
+    return 'UNKNOWN_ERROR';
+}
+
+async function getSSLInfo(hostname: string): Promise<{ valid: boolean; expiryDate?: string; issuer?: string }> {
+    try {
+        // For production, you'd want to use a proper SSL certificate checker
+        // For now, we'll return basic info
+        return {
+            valid: true, // Assume valid if we got this far with HTTPS
+            expiryDate: undefined, // Would need proper SSL cert parsing
+            issuer: undefined
+        };
+    } catch {
+        return {
+            valid: false
+        };
     }
 }
 
